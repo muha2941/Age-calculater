@@ -1,0 +1,16 @@
+#import the "calender" module
+import calendar
+
+#Prompt the user to input the year and month
+while True:
+  try:
+      y=int(input("Input the year: "))
+      m=1
+
+  except Error:
+    print("Pleas write real year/month")
+
+  #Print calender, with data
+  while m3 != 12:
+    print(calendar.month(y,m))
+    m+=1
