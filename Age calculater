@@ -1,0 +1,17 @@
+#Write a  program to display the current date and time.
+#import the "datetime" module to work with date time
+from datetime import date
+
+def calculate_age(birth_year):
+    current_year=date.today().year
+    age=current_year-birth_year
+    return age
+while True:
+  try:
+    birth_year=int(input("Enter your birth year:"))
+    age = calculate_age(birth_year)
+    print(f"You are {age} year old.")
+  except ValueError:
+    if age=="stop":
+      break
+    print("Please enter a valid year.")
