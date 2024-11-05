@@ -1,0 +1,28 @@
+import pygame
+from datetime import datetime
+
+pygame.init()
+
+screen = pygame.display.set_mode((400, 300))
+pygame.display.set_caption("Clock")
+
+font = pygame.font.Font(None, 74)
+clock = pygame.time.Clock()
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    screen.fill((255, 200, 150))
+
+    current_time = datetime.now().strftime('%H:%M:%S')
+    text = font.render(current_time, True, (0, 0, 0))
+    
+    screen.blit(text, (100, 100))
+    
+    pygame.display.flip()
+    clock.tick(1)
+
+pygame.quit()
