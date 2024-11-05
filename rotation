@@ -1,0 +1,41 @@
+import pygame
+import math
+
+pygame.init()
+
+screen = pygame.display.set_mode((800, 600))
+pygame.display.set_caption("Rotation Example")
+
+clock = pygame.time.Clock()
+
+# Points of a square
+points = [(100, 100), (200, 100), (200, 200), (100, 200)]
+angle = 0
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    screen.fill((255, 255, 255))
+
+    angle += 1  # Rotate by 1 degree per frame
+    if angle >= 360:
+        angle = 0
+
+    rotated_points = []
+    for point in points:
+        x, y = point
+        x -= 150  # Center of rotation (150, 150)
+        y -= 150
+        new_x = x * math.cos(math.radians(angle)) - y * math.sin(math.radians(angle))
+        new_y = x * math.sin(math.radians(angle)) + y * math.cos(math.radians(angle))
+        rotated_points.append((new_x + 150, new_y + 150))
+
+    pygame.draw.polygon(screen, (0, 0, 0), rotated_points, 1)
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
