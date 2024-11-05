@@ -1,0 +1,62 @@
+import pygame
+import math
+
+pygame.init()
+
+# Screen settings
+screen_size = 800
+screen = pygame.display.set_mode((screen_size, screen_size))
+pygame.display.set_caption("Rotation Around Point")
+
+# Colors
+black = (0, 0, 0)
+white = (255, 255, 255)
+
+# Clock settings
+clock = pygame.time.Clock()
+
+# Points of a square (relative to center)
+points = [(50, 50), (-50, 50), (-50, -50), (50, -50)]
+angle = 0
+rotation_center = (150, 150)  # Point around which to rotate
+
+def rotate_point(x, y, angle, cx, cy):
+    """Rotate a point around a given center"""
+    radians = math.radians(angle)
+    cos_angle = math.cos(radians)
+    sin_angle = math.sin(radians)
+    
+    # Translate point to origin
+    x -= cx
+    y -= cy
+
+    # Rotate point
+    x_new = x * cos_angle - y * sin_angle
+    y_new = x * sin_angle + y * cos_angle
+
+    # Translate point back
+    x = x_new + cx
+    y = y_new + cy
+
+    return x, y
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    screen.fill(white)
+
+    angle += 1  # Rotate by 1 degree per frame
+    if angle >= 360:
+        angle = 0
+
+    rotated_points = [rotate_point(x, y, angle, rotation_center[0], rotation_center[1]) for x, y in points]
+
+    pygame.draw.polygon(screen, black, rotated_points, 1)
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
