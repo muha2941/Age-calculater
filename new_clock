@@ -1,0 +1,71 @@
+import pygame
+import math
+from datetime import datetime
+
+# Initialize Pygame
+pygame.init()
+
+# Screen settings
+screen_size = 400
+screen = pygame.display.set_mode((screen_size, screen_size))
+pygame.display.set_caption("A Clock")
+
+ICON=pygame.image.load("clock.jpg")
+pygame.display.set_icon(ICON)
+
+# Colors
+black = (0, 0, 0)
+white = (255, 255, 255)
+red = (255, 0, 0)
+
+# Clock settings
+clock_radius = 150
+clock_center = (screen_size // 2, screen_size // 2)
+font = pygame.font.Font(None, 36)
+clock = pygame.time.Clock()
+
+def draw_hand(center, length, angle, color, width):
+    end_x = center[0] + length * math.sin(math.radians(angle))
+    end_y = center[1] - length * math.cos(math.radians(angle))
+    pygame.draw.line(screen, color, center, (end_x, end_y), width)
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    screen.fill(white)
+
+    # Draw clock face
+    pygame.draw.circle(screen, black, clock_center, clock_radius, 4)
+
+    # Draw clock numbers
+    for number in range(1, 13):
+        angle = math.radians((number - 3) * 30)
+        x = clock_center[0] + (clock_radius - 20) * math.cos(angle)
+        y = clock_center[1] + (clock_radius - 20) * math.sin(angle)
+        text = font.render(str(number), True, black)
+        text_rect = text.get_rect(center=(x, y))
+        screen.blit(text, text_rect)
+
+    # Get current time
+    now = datetime.now()
+    hours = now.hour % 12
+    minutes = now.minute
+    seconds = now.second
+
+    # Calculate hand angles
+    second_angle = (seconds * 6)
+    minute_angle = (minutes * 6) + (seconds * 0.1)
+    hour_angle = (hours * 30) + (minutes * 0.5)
+
+    # Draw hands
+    draw_hand(clock_center, clock_radius - 40, hour_angle, black, 5)
+    draw_hand(clock_center, clock_radius - 20, minute_angle, black, 3)
+    draw_hand(clock_center, clock_radius - 10, second_angle, red, 1)
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
